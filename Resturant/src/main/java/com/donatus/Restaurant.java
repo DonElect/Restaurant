@@ -5,6 +5,7 @@ import com.donatus.implementation.Customer;
 import com.donatus.implementation.ManagerImp;
 import com.donatus.implementation.Products;
 import com.donatus.models.Cashier;
+import com.donatus.models.CustomerModel;
 import com.donatus.models.Manager;
 
 public class Restaurant {
@@ -20,24 +21,35 @@ public class Restaurant {
                 "jane@gmail.com", "Stand 1");
 
         CashierImp cashierImp = new CashierImp(cashier);
-        Customer customer = new Customer();
+
+        Customer customer1 = new Customer(new CustomerModel("Mike"));
+        Customer customer2 = new Customer(new CustomerModel("John"));
+        Customer customer3 = new Customer(new CustomerModel("Samuel"));
 
         new Products().addProductsToRestaurant();
         new Products().viewItems(new Products().getFoods());
         System.out.println();
         new Products().viewItems(new Products().getDrinks());
 
-//        // Adding to stock
-//        cashierImp.addToStock("Pepper Soup", 1500);
-//        cashierImp.addToStock("Coke", 250);
-//        cashierImp.addToStock("Rice", 1000);
-//
-//        // Customer making request
-//        customer.makeRequest("Coke");
-//        customer.makeRequest("Pepper Soup");
-//
-//        // Make buy request
-//        customer.buy();
+        // Adding to stock
+
+        // Customer making request
+        customer1.makeRequest("Coke", 3);
+        customer1.makeRequest("Pepper soup", 3);
+
+        customer2.makeRequest("Coke", 4);
+        customer2.makeRequest("Pepper soup", 4);
+
+        customer3.makeRequest("Coke", 1);
+        customer3.makeRequest("Pepper soup", 2);
+
+        // Make buy request
+        customer1.buy();
+        customer2.buy();
+        customer3.buy();
+
+        cashierImp.sellFIFO();
+        //cashierImp.sellPriority();
 //
 //        // Cashier should give receipt
 //        cashierImp.dispenseReceipt(customer);

@@ -5,7 +5,6 @@ import com.donatus.services.CATEGORY;
 import com.donatus.services.ProductManagement;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ public class Products implements ProductManagement {
     private static Map<String, ProductProperties> foods = new HashMap<>();
     private static Map<String, ProductProperties> drinks = new HashMap<>();
 
-    public Products(){
+    public Products() {
 
     }
 
@@ -26,16 +25,16 @@ public class Products implements ProductManagement {
     }
 
     @Override
-    public boolean addProductsToRestaurant()  {
+    public boolean addProductsToRestaurant() {
         File file = new File("./src/main/resources/productList.csv");
         String line = "";
 
-        try(BufferedReader reader = new BufferedReader(new FileReader(file))){
-            while ((line = reader.readLine()) != null){
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            while ((line = reader.readLine()) != null) {
                 String[] row = line.split(",");
                 //System.out.println(Arrays.toString(row));
-                if(!row[0].equalsIgnoreCase("name")){
-                    if(row[1].equalsIgnoreCase("drinks")){
+                if (!row[0].equalsIgnoreCase("name")) {
+                    if (row[1].equalsIgnoreCase("drinks")) {
                         ProductProperties newProduct = new ProductProperties();
                         newProduct.setName(row[0]);
                         newProduct.setCAT(CATEGORY.DRINKS);
@@ -44,7 +43,7 @@ public class Products implements ProductManagement {
                         // Adding created product to drinks Map
                         drinks.put(row[0], newProduct);
                     }
-                    if(row[1].equalsIgnoreCase("food")){
+                    if (row[1].equalsIgnoreCase("food")) {
                         ProductProperties newProduct = new ProductProperties();
                         newProduct.setName(row[0]);
                         newProduct.setCAT(CATEGORY.FOOD);
@@ -57,9 +56,9 @@ public class Products implements ProductManagement {
             }
             return true;
         } catch (FileNotFoundException e) {
-            System.out.println("File not Found"+ e);
+            System.out.println("File not Found" + e);
         } catch (IOException e) {
-            System.out.println("Input or Ouput error"+ e);
+            System.out.println("Input or Ouput error" + e);
         }
         return false;
     }
@@ -69,10 +68,10 @@ public class Products implements ProductManagement {
         return false;
     }
 
-    public void viewItems(Map<String, ProductProperties> productPropertiesMap){
-        System.out.println("Name"+"              "+"Price"+"           "+"Quantity");
-        for(var item : productPropertiesMap.values()){
-            System.out.printf("%-18s %-18s %-18s", item.getName(),item.getPrice(),item.getQuantity());
+    public void viewItems(Map<String, ProductProperties> productPropertiesMap) {
+        System.out.println("Name" + "              " + "Price" + "           " + "Quantity");
+        for (var item : productPropertiesMap.values()) {
+            System.out.printf("%-18s %-18s %-18s", item.getName(), item.getPrice(), item.getQuantity());
             System.out.println();
         }
     }

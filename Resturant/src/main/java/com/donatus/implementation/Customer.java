@@ -1,5 +1,6 @@
 package com.donatus.implementation;
 
+import com.donatus.models.CustomerModel;
 import com.donatus.models.ProductProperties;
 import com.donatus.services.CATEGORY;
 
@@ -7,7 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Customer {
+
+    private CustomerModel customer;
     private Map<String, ProductProperties> cart = new HashMap<>();
+    public Customer(CustomerModel customer){
+        this.customer = customer;
+    }
+
     public Customer(){
 
     }
@@ -58,14 +65,13 @@ public class Customer {
     }
 
     public void buy(){
-        //System.out.println(cart);
-        System.out.println("-----------------------------------");
-        System.out.println("Item"+"               "+"Price");
-        for(Map.Entry<String, ProductProperties> items : cart.entrySet()){
-            System.out.println(items.getKey()+"        |        "+items.getValue());
-        }
-        System.out.println("Go to the cashier stand and pay");
-        System.out.println();
+        customer.setCart(cart);
+
+        // FIFO Queue
+        new CashierImp().getCustomersFIFOQueue().add(customer);
+
+        // Priority Queue
+        new CashierImp().getCustomersPriorityQueue().add(new CustomerModel(customer.getFullName(), cart));
     }
 
     public Map<String, ProductProperties> getCart() {

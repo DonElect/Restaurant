@@ -50,4 +50,14 @@ public class ProductProperties {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public String toString() {
+        return "ProductProperties{" +
+                "name='" + name + '\'' +
+                ", CAT=" + CAT +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                '}';
+    }
 }
