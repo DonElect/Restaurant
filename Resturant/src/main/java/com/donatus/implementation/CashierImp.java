@@ -5,13 +5,13 @@ import com.donatus.models.CustomerModel;
 import com.donatus.models.ProductProperties;
 import com.donatus.services.CashierServices;
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 public class CashierImp implements CashierServices {
     private Cashier cashier;
+
+    private final String lock1 = "lock1";
+    private final String lock2 = "lock2";
 
     private static Queue<CustomerModel> customersFIFOQueue = new LinkedList<>();
 
@@ -37,34 +37,47 @@ public class CashierImp implements CashierServices {
     }
 
     public void sellFIFO() {
-        while (!customersFIFOQueue.isEmpty()) {
-            CustomerModel currentCustomer = customersFIFOQueue.poll();
-            Map<String, ProductProperties> myCart = currentCustomer.getCart();
-            String fullName = currentCustomer.getFullName();
+        if (customersFIFOQueue.isEmpty())
+            return;
+        CustomerModel currentCustomer = customersFIFOQueue.poll();
+        Map<String, ProductProperties> myCart = currentCustomer.getCart();
+        String fullName = currentCustomer.getFullName();
+        synchronized (lock1) {
             dispenseReceipt(myCart, fullName);
+            System.out.println("Thank you for patronizing us. "+Thread.currentThread().getName());
         }
     }
 
     public void sellPriority() {
-        while (!customersPriorityQueue.isEmpty()) {
-            CustomerModel currentCustomer = customersPriorityQueue.poll();
-            Map<String, ProductProperties> myCart = currentCustomer.getCart();
-            String fullName = currentCustomer.getFullName();
+        if (customersPriorityQueue.isEmpty())
+            return;
+        CustomerModel currentCustomer = customersPriorityQueue.poll();
+        Map<String, ProductProperties> myCart = currentCustomer.getCart();
+        String fullName = currentCustomer.getFullName();
+        synchronized (lock2) {
             dispenseReceipt(myCart, fullName);
+            System.out.println("Thank you for patronizing us. "+Thread.currentThread().getName());
         }
     }
 
 
     private void dispenseReceipt(Map<String, ProductProperties> myCart, String fullName) {
-        int sum = 0;
         System.out.println("---------------------------------");
+        System.out.println(fullName+" Purchase Receipt");
         System.out.println("Items" + "                      " + "Price");
-        for (Map.Entry<String, ProductProperties> items : myCart.entrySet()) {
-            System.out.println(items.getKey() + "                     " + items.getValue().getPrice());
-            sum += items.getValue().getQuantity()*items.getValue().getPrice();
-        }
-        System.out.println("Bill: " + sum);
-        System.out.println("Thank you for patronizing us " + fullName + ". Have a nice day");
+
+        Set<Integer> set = new HashSet<>();
+        Set<Map.Entry<String, ProductProperties>> cartSet = new HashSet<>(myCart.entrySet());
+
+        int totalCost = cartSet.stream().peek(item ->
+                System.out.printf("%-25s %-25s \n", item.getKey(), item.getValue().getPrice())
+        ).map(item -> item.getValue().getPrice() * item.getValue().getQuantity()).reduce(0, Integer::sum);
+
+//        for (Map.Entry<String, ProductProperties> items : myCart.entrySet()) {
+//            System.out.println(items.getKey() + "                     " + items.getValue().getPrice());
+//            sum += (items.getValue().getQuantity()) * (items.getValue().getPrice());
+//        }
+        System.out.println("Bill: " + totalCost);
     }
 
     public Queue<CustomerModel> getCustomersFIFOQueue() {

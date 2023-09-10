@@ -7,6 +7,8 @@ import com.donatus.services.ProductManagement;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class Products implements ProductManagement {
     private static Map<String, ProductProperties> foods = new HashMap<>();
@@ -68,11 +70,16 @@ public class Products implements ProductManagement {
         return false;
     }
 
-    public void viewItems(Map<String, ProductProperties> productPropertiesMap) {
+//    public void viewItems(Map<String, ProductProperties> productPropertiesMap) {
+//        System.out.println("Name" + "              " + "Price" + "           " + "Quantity");
+//        for (var item : productPropertiesMap.values()) {
+//            System.out.printf("%-18s %-18s %-18s", item.getName(), item.getPrice(), item.getQuantity());
+//            System.out.println();
+//        }
+//    }
+
+    public static Consumer<Map<String, ProductProperties>> viewItemsFunc = store ->{
         System.out.println("Name" + "              " + "Price" + "           " + "Quantity");
-        for (var item : productPropertiesMap.values()) {
-            System.out.printf("%-18s %-18s %-18s", item.getName(), item.getPrice(), item.getQuantity());
-            System.out.println();
-        }
-    }
+        store.forEach((key, value)-> System.out.printf("%-18s %-18s %-18s \n", key, value.getPrice(), value.getQuantity()));
+    };
 }

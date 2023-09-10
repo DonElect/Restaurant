@@ -1,0 +1,7 @@
+Lamda Functions
+1. Functions --- BiFunction
+2. Consumers --- BiConsumers
+3. Suppliers
+4. Predicates
+
+Streams API
